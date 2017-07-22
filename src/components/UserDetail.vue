@@ -26,9 +26,9 @@ export default {
     }
   },
   methods: {      
-    deleteContact(ID){
+    deleteContact(ID){ 
       this.deleteDataFireBase(ID);
-      this.getDataFireBase();  
+      this.getDataFireBase();
     },
     editData(ID){
       this.editDataFireBase(ID);
@@ -36,7 +36,8 @@ export default {
      ...mapMutations([
         'editDataFireBase',
         'getDataFireBase',
-        'deleteDataFireBase'        
+        'deleteDataFireBase',
+        'cancelEditForm'        
     ])
   }
   
