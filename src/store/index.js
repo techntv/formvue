@@ -24,7 +24,10 @@ const state = {
 }
 
 const mutations = {
-    getDataFireBase(data){       
+    addDataFireBase(state, payload){
+        userRef.push(payload);
+    },
+    getDataFireBase(state, payload){       
        let userList = [];      
 
         userRef.on('value', function(snapshot) {
@@ -39,21 +42,32 @@ const mutations = {
             });
         });
 
-      
-      state.dataFireBase = userList;
-      console.log(state.dataFireBase);
+      state.dataFireBase = userList;      
     },
-    setDataFireBase(state, data){
+    updateDataFireBase(state, payload){
+        let modifiRef = db.ref('users/' + payload.idUpdate); 
+
+        delete payload.dataUpdate.id;
+        modifiRef.update(payload.dataUpdate);
+        window.swal({
+                        title: "Congratulation!",
+                        text: "You have updated successfully",
+                        type: "warning",
+                        confirmButtonText: "Close",
+                        confirmButtonColor: "skyblue"
+          });
         
     },
-    deleteDataFireBase(state, data){
+    deleteDataFireBase(state, payload){
+        let removeUser = db.ref('users/' + payload);
        
+        removeUser.remove();
     },
-    editDataFireBase(ID){
-        let updateUser = db.ref('users/' + ID);
-
-       
+    editDataFireBase(state, payload){
+        let id = payload;
+        let updateUser = db.ref('users/' + id);       
         let userListUpdate = [];
+
         updateUser.once('value', function(snapshot) {            
                 var user = {   
                     id: snapshot.key,           
@@ -64,15 +78,17 @@ const mutations = {
                 userListUpdate.push(user);           
         });
        
-      state.dataEditForm = userListUpdate;
-
-       state.flagEdit = true;        
+      state.dataEditForm = userListUpdate;     
+      state.flagEdit = true;        
+    },
+    cancelEditForm(){
+        state.flagEdit = false;
     }
 }
 
 const actions = {    
     getDataFireBase: ({commit}) => commit('getDataFireBase'),
-    setDataFireBase: ({commit}) => commit('setDataFireBase'),
+    updateDataFireBase: ({commit}) => commit('updateDataFireBase'),
     deleteDataFireBase: ({commit}) => commit('deleteDataFireBase'),
     editDataFireBase: ({commit}) => commit('editDataFireBase')
     

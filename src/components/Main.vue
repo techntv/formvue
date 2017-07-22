@@ -39,18 +39,10 @@
 
 <script>
   import store from '../store/index.js'
-  import firebase from 'firebase'
-  import {    
-    mapActions,mapMutations    
-  } from 'vuex'
-
-
-
-let db = firebase.database();
-let userRef = db.ref('users');
+  import {  mapActions,mapMutations } from 'vuex'
 
 export default {
-  name: 'hello',  
+  name: 'main',  
   store, 
   data () {
     return {
@@ -92,10 +84,10 @@ export default {
           });
       } else {     
         
-        userRef.push(self.newUser);
+        this.addDataFireBase(self.newUser);
         
         window.swal({
-                        title: "Congraduation!",
+                        title: "Congratulation!",
                         text: "You have signed up successfully",
                         type: "warning",
                         confirmButtonText: "Close",
@@ -105,7 +97,10 @@ export default {
         this.newUser.email = '';
         this.newUser.phone = '';
       } 
-    }   
+    },
+    ...mapMutations([
+      'addDataFireBase'
+    ])   
   }
 }
 </script>

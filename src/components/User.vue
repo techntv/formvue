@@ -15,7 +15,7 @@
             <userdetail v-for="user in userListFireBase" :user="user" :key="user.id"></userdetail>
           </tbody>
       </table>
-        <editform v-if="flagEditControl" @clicked="getDataFireBase" :userListUpdate="userListUpdate"></editform>
+        <editform v-if="flagEditControl"></editform>
       </div>
     </div>
 </template>
@@ -25,18 +25,13 @@ import store from '../store/index.js'
 import UserDetail from '@/components/UserDetail.vue'
 import EditForm from '@/components/EditForm.vue'
 import { mapActions,mapMutations,mapState } from 'vuex'
-import firebase from 'firebase'
-
-
-let db = firebase.database();
-let userRef = db.ref('users');
 
 export default {
   name: 'user',
   store,  
   data () {
     return { 
-      userListUpdate: []   
+     
     }
   },
   components: {

@@ -29,8 +29,8 @@
 
         <div class="form-group">
           <div class="col-sm-offset-2 col-sm-10">
-            <button type="submit" class="btn btn-success" @click.prevent="updateUser">Update</button>
-             <button type="submit" class="btn btn-danger" @click.prevent="updateUser">Cancel</button>           
+            <button type="submit" class="btn btn-success" @click.prevent="updateUser({dataUpdate: dataEditForm[0], idUpdate: dataEditForm[0].id})">Update</button>
+             <button type="submit" class="btn btn-danger" @click.prevent="cancelUpdate">Cancel</button>           
           </div>
         </div>
       
@@ -40,19 +40,13 @@
 
 <script>
 import store from '../store/index.js'
-import firebase from 'firebase'
 import { mapActions,mapMutations,mapState } from 'vuex'
  
-let db = firebase.database();
-let userRef = db.ref('users');
 
 export default {
   name: 'userdetail',
   props: ['userListUpdate'],
-  store,
-  firebase: {
-    users: userRef
-  },
+  store,  
   data () {
     return {
       msg: 'Welcome to Your Vue.js App',        
@@ -64,16 +58,18 @@ export default {
       }
   },
   methods: {      
-    updateUser(){
-        
-        let self = this;
-        let modifiRef = db.ref('users/' + self.userListUpdate[0].id); 
-
-        delete self.userListUpdate[0].id;
-        modifiRef.update(self.userListUpdate[0]);
-         console.log(self.userListUpdate[0]);
-         this.$emit('clicked',false);
-    }
+    updateUser(payload){
+        this.updateDataFireBase(payload);  
+        this.getDataFireBase();     
+    },
+    cancelUpdate(){
+        this.cancelEditForm();
+    },
+    ...mapMutations([
+        'updateDataFireBase',
+        'getDataFireBase',
+        'cancelEditForm'              
+    ])
   }
 }
 </script>
