@@ -44,17 +44,9 @@
     mapActions,mapMutations    
   } from 'vuex'
 
-const config = {
-    apiKey: "AIzaSyBr4OfmIDf6CFqRHS942EEfkkGZBB8LPjU",
-    authDomain: "vueform-90638.firebaseapp.com",
-    databaseURL: "https://vueform-90638.firebaseio.com",
-    projectId: "vueform-90638",
-    storageBucket: "",
-    messagingSenderId: "922841769727"
-  };
 
-const app = firebase.initializeApp(config);
-let db = app.database();
+
+let db = firebase.database();
 let userRef = db.ref('users');
 
 export default {

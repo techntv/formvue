@@ -12,10 +12,10 @@
             </tr>
         </thead>
           <tbody>
-            <userdetail v-for="user in $store.state.user" :user="user" :key="user.name" @clicked="getDataFireBase" @flagEdit="flagEditControl"></userdetail>
+            <userdetail v-for="user in userListFireBase" :user="user" :key="user.id"></userdetail>
           </tbody>
       </table>
-        <editform v-if="flagEdit" @clicked="getDataFireBase" :userListUpdate="userListUpdate"></editform>
+        <editform v-if="flagEditControl" @clicked="getDataFireBase" :userListUpdate="userListUpdate"></editform>
       </div>
     </div>
 </template>
@@ -24,8 +24,10 @@
 import store from '../store/index.js'
 import UserDetail from '@/components/UserDetail.vue'
 import EditForm from '@/components/EditForm.vue'
-
+import { mapActions,mapMutations,mapState } from 'vuex'
 import firebase from 'firebase'
+
+
 let db = firebase.database();
 let userRef = db.ref('users');
 
@@ -33,10 +35,7 @@ export default {
   name: 'user',
   store,  
   data () {
-    return {
-      msg: 'Welcome to Your Vue.js App',
-      userList : [],  
-      flagEdit: false,
+    return { 
       userListUpdate: []   
     }
   },
@@ -44,40 +43,22 @@ export default {
     'userdetail': UserDetail,
     'editform': EditForm
   },
+  computed: {   
+     userListFireBase(){
+          return this.$store.state.dataFireBase;
+      },   
+      flagEditControl(){
+        return this.$store.state.flagEdit;
+      }
+  },
   methods: {
-    getDataFireBase (){
-      var self = this;
-       self.userList = [];
-
-        userRef.on('value', function(snapshot) {
-            snapshot.forEach(function(childSnapshot) {           
-                var user = {
-                    id: childSnapshot.key,
-                    name: childSnapshot.val().name,
-                    phone: childSnapshot.val().phone,
-                    email: childSnapshot.val().email
-                };
-
-                self.userList.push(user);
-            });
-        });
-
-      console.log(self.userList);
-      store.state.user = self.userList;
-       this.flagEdit = false; 
-    },
-    flagEditControl(data){
-      this.userListUpdate = [];
-      if(data != undefined){
-          this.flagEdit = data[0];    
-          this.userListUpdate = data[1]; 
-          console.log(data);
-      }      
-    }
+    ...mapMutations([
+        'getDataFireBase'        
+    ])
   },
   created(){
     this.getDataFireBase();
-  }
+  }  
 }
 </script>
 
